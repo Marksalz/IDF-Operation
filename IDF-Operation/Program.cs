@@ -31,7 +31,7 @@ namespace IDF_Operation
         {
             Random rnd = new Random();
             List<Terrorist> terorist = new List<Terrorist>();
-            List<String> nams = new List<string> {
+            List<String> names = new List<string> {
                 "Ahmed Al-Masri",
                 "Khaled Barakat",
                 "Youssef Al-Qassem",
@@ -53,19 +53,19 @@ namespace IDF_Operation
                 "Salim Mansour",
                 "Jamal Al-Tayeb"
             };
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < names.Count(); i++)
             {
-                List<String> weaponsAvailabol = new List<string>(weapons);
+                List<String> weaponsAvailable = new List<string>(weapons);
                 List<String> teroristWeapons = new List<string>();
 
                 for (int j = 0; j < rnd.Next(1, 4); j++)
                 {
-                    int randomIndex = rnd.Next(weaponsAvailabol.Count);
-                    teroristWeapons.Add(weaponsAvailabol[randomIndex]);
-                    teroristWeapons.RemoveAt(randomIndex);
+                    int randomIndex = rnd.Next(weaponsAvailable.Count);
+                    teroristWeapons.Add(weaponsAvailable[randomIndex]);
+                    weaponsAvailable.RemoveAt(randomIndex);
                 }
-                Terrorist currentTerorist = new Terrorist(nams[i], rnd.Next(1,5), true, teroristWeapons);
-                nams.RemoveAt(i);
+                Terrorist currentTerorist = new Terrorist(names[i], rnd.Next(1,5), true, teroristWeapons);
+                names.RemoveAt(i);
                 terorist.Add(currentTerorist);
             }
 

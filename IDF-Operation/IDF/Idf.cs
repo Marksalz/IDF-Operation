@@ -26,7 +26,7 @@ namespace IDF_Operation.IDF
         {
             foreach (var option in this._strikeOptions)
             {
-                if (option.IsAvailable())
+                if (option.isAvailable())
                 {
                     Console.WriteLine($"Attack unit name: {option.getName()}, " +
                         $"remaining capacity: {option.getCapacity()}");

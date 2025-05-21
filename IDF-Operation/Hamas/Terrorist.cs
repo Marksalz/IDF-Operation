@@ -12,9 +12,9 @@ namespace IDF_Operation.Hamas
         private string name;
         private int rank;
         private bool aleve;
-        private List<String> weapons;
+        private List<string> weapons;
 
-        public Terrorist(string name, int rank, bool aleve, List<String> weapons)
+        public Terrorist(string name, int rank, bool aleve, List<string> weapons)
         {
             this.name = name;
             this.rank = rank;
@@ -41,7 +41,7 @@ namespace IDF_Operation.Hamas
             this.aleve = false;
         }
 
-        public List<String> getWeapons()
+        public List<string> getWeapons()
         {
             return this.weapons;
         }
