@@ -53,6 +53,8 @@ namespace IDF_Operation
                 "Salim Mansour",
                 "Jamal Al-Tayeb"
             };
+
+           
             for (int i = 0; i < 20; i++)
            
             {
@@ -60,6 +62,7 @@ namespace IDF_Operation
                 List<string> teroristWeapons = new List<string>(shuffledWeapons.Take(rnd.Next(1,5)).ToList());
                 Terrorist currentTerorist = new Terrorist(names[i], rnd.Next(1,5), true, teroristWeapons);
                 terorists.Add(currentTerorist);
+
             }
 
             return terorists;

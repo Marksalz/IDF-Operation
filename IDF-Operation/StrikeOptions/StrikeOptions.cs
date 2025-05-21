@@ -33,7 +33,7 @@ namespace IDF_Operation.StrikeOptions
             }
         }
 
-        public bool isAvalible()
+        public bool isAvailable()
         {
             if (_capacity > 0)
             {
@@ -44,5 +44,8 @@ namespace IDF_Operation.StrikeOptions
                 return false;
             }
         }
+
+        public int getCapacity() { return _capacity; }
+        public string? getName() { return _name; }
     }
 }
