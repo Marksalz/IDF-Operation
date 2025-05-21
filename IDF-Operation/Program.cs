@@ -4,10 +4,7 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
-            IDF iDF = new IDF();
-
-          
+           
         }
     }
 }

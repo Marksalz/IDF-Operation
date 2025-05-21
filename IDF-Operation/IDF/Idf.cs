@@ -1,12 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace IDF_Operation.IDF
 {
     internal class Idf
     {
+        private DateTime _date = new DateTime(1948, 5, 26);
+        private string? _commanderName;
+        private List<StrikeOptions.StrikeOptions> _strikeOptions;
+        public Idf(string? commanderName, List<StrikeOptions.StrikeOptions> strikeOptions)
+        {
+            this._commanderName = commanderName;
+            this._strikeOptions = strikeOptions;
+        }
+
+        public List<StrikeOptions.StrikeOptions> GetStrikeOptions()
+        {
+            return this._strikeOptions;
+        }
+
+        public void addStrikeOptions(StrikeOptions.StrikeOptions option)
+        {
+            this._strikeOptions.Add(option);
+        }
+
+        public void printAvalibleOptions()
+        {
+            foreach (var option in this._strikeOptions)
+            {
+                if (option.IsAvailable())
+                {
+                    Console.WriteLine($"Attack unit name: {option.getName()}, " +
+                        $"remaining capacity: {option.getCapacity()}");
+                }
+            }
+        }
     }
 }
