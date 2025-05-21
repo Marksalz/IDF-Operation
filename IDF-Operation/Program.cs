@@ -20,7 +20,7 @@ namespace IDF_Operation
 
             foreach (Terrorist terrorist in terrorists)
             {
-                terrorist.ToString();
+                Console.WriteLine(terrorist);
             }
 
             
@@ -29,8 +29,8 @@ namespace IDF_Operation
         public static List<Terrorist> generateTerroristList()
         {
             Random rnd = new Random();
-            List<Terrorist> terorist = new List<Terrorist>();
-            List<String> nams = new List<string> {
+            List<Terrorist> terorists = new List<Terrorist>();
+            List<string> names = new List<string> {
                 "Ahmed Al-Masri",
                 "Khaled Barakat",
                 "Youssef Al-Qassem",
@@ -53,22 +53,15 @@ namespace IDF_Operation
                 "Jamal Al-Tayeb"
             };
             for (int i = 0; i < 20; i++)
+           
             {
-                List<String> weaponsAvailabol = new List<string>(weapons);
-                List<String> teroristWeapons = new List<string>();
-
-                for (int j = 0; j < rnd.Next(1, 4); j++)
-                {
-                    int randomIndex = rnd.Next(weaponsAvailabol.Count);
-                    teroristWeapons.Add(weaponsAvailabol[randomIndex]);
-                    teroristWeapons.RemoveAt(randomIndex);
-                }
-                Terrorist currentTerorist = new Terrorist(nams[i], rnd.Next(1,5), true, teroristWeapons);
-                nams.RemoveAt(i);
-                terorist.Add(currentTerorist);
+                List<string> shuffledWeapons = weapons.OrderBy(w => rnd.Next()).ToList();
+                List<string> teroristWeapons = new List<string>(shuffledWeapons.Take(rnd.Next(1,5)).ToList());
+                Terrorist currentTerorist = new Terrorist(names[i], rnd.Next(1,5), true, teroristWeapons);
+                terorists.Add(currentTerorist);
             }
 
-            return terorist;
+            return terorists;
         }
     }
 }
