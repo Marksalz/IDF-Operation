@@ -69,7 +69,7 @@ namespace IDF_Operation.Hamas
 
         public override string ToString()
         {
-            return $"Name: {this.name}, Rank: {this.rank}, Is aleve: {this.aleve}, Weapons: {this.weapons}";
+            return $"Name: {this.name}, Rank: {this.rank}, Is aleve: {this.aleve}, Weapons: {string.Join(",", this.weapons)}";
         }
 
 
