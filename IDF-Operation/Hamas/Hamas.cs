@@ -10,7 +10,7 @@ namespace IDF_Operation.Hamas
     {
         private DateTime _dateOfFoundation = new DateTime(1987, 1, 1);
         private Terrorist commander;
-        private  List<Terrorist> terrorists;
+        private List<Terrorist> terrorists = new List<Terrorist>();
 
 
         public Hamas(Terrorist commander)
