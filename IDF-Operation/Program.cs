@@ -10,6 +10,7 @@ namespace IDF_Operation
         static void Main(string[] args)
         {
            
+
             //Idf idf = new Idf("Ben-Gurion");
             Terrorist commander = new Terrorist("El-Arory", 5, true, weapons);
             Hamas.Hamas hamas = new Hamas.Hamas(commander);
@@ -69,6 +70,8 @@ namespace IDF_Operation
             }
 
             return terorist;
+
+
         }
     }
 }
