@@ -23,7 +23,7 @@ namespace IDF_Operation.StrikeOptions
 
         public void updateCapacity()
         {
-            if(_capacity > 0)
+            if (_capacity > 0)
             {
                 _capacity--;
             }
@@ -47,5 +47,10 @@ namespace IDF_Operation.StrikeOptions
 
         public int getCapacity() { return _capacity; }
         public string? getName() { return _name; }
+
+        public string printStrikeOptionsNameAndCapicaty()
+        {
+            return $"Name: {_name}\nCapacity: {_capacity}";
+        }
     }
 }
