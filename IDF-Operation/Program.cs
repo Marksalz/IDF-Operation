@@ -1,30 +1,25 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using IDF_Operation.Hamas;
 using IDF_Operation.IDF;
+using IDF_Operation.StrikeOptions;
 
 namespace IDF_Operation
 {
     internal class Program
     {
         static List<string> weapons = ["Knife", "Gun", "M16", "AK47"];
+
         static void Main(string[] args)
         {
-           
+            // intialize the IDF
+            List<StrikeOptions.StrikeOptions> strikeOptions = generateStrikeOptions();
+            Idf idf = new Idf("Eyal Zamir", strikeOptions);
 
-            //Idf idf = new Idf("Ben-Gurion");
+            // initialize the Hamas
             Terrorist commander = new Terrorist("El-Arory", 5, true, weapons);
             Hamas.Hamas hamas = new Hamas.Hamas(commander);
-
-
             List<Terrorist> terrorists = generateTerroristList();
             hamas.addTeroristList(terrorists);
-
-            foreach (Terrorist terrorist in terrorists)
-            {
-                Console.WriteLine(terrorist);
-            }
-
-            
         }
 
         public static List<Terrorist> generateTerroristList()
@@ -67,6 +62,21 @@ namespace IDF_Operation
 
             return terorists;
         }
+
+        public static List<StrikeOptions.StrikeOptions> generateStrikeOptions()
+        {
+            // Example strike options
+            var options = new List<StrikeOptions.StrikeOptions>
+            {
+                new F16("F-16", 8, 500.0, new List<string> { "building" }, "1 Ton"),
+                new Zik("Zik", 3, 100.0, new List<string> { "people", "vehicles" }),
+                new M109("M109", 40, 50.0, new List<string> { "open areas" }, "Explosive shells")
+            };
+            return options;
+        }
+
+
+
     }
 }
     
