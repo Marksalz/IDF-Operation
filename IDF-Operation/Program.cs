@@ -6,7 +6,31 @@ namespace IDF_Operation
 {
     internal class Program
     {
+        static Random rnd = new Random();
         static List<string> weapons = ["Knife", "Gun", "M16", "AK47"];
+
+        static List<string> names = new List<string> {
+                "Ahmed Al-Masri",
+                "Khaled Barakat",
+                "Youssef Al-Qassem",
+                "Mohammed Darwish",
+                "Samir Al-Haddad",
+                "Omar Nasser",
+                "Bassam Jaber",
+                "Tariq Al-Amin",
+                "Nabil Farhat",
+                "Fadi Khoury",
+                "Majed Abu Salah",
+                "Hassan Al-Zein",
+                "Rami Suleiman",
+                "Ibrahim Al-Atrash",
+                "Adnan Marwan",
+                "Wael Khalifa",
+                "Amjad Al-Rawi",
+                "Ziad Abu Hatem",
+                "Salim Mansour",
+                "Jamal Al-Tayeb"
+            };
         static void Main(string[] args)
         {
            
@@ -29,30 +53,9 @@ namespace IDF_Operation
 
         public static List<Terrorist> generateTerroristList()
         {
-            Random rnd = new Random();
+            
             List<Terrorist> terorists = new List<Terrorist>();
-            List<string> names = new List<string> {
-                "Ahmed Al-Masri",
-                "Khaled Barakat",
-                "Youssef Al-Qassem",
-                "Mohammed Darwish",
-                "Samir Al-Haddad",
-                "Omar Nasser",
-                "Bassam Jaber",
-                "Tariq Al-Amin",
-                "Nabil Farhat",
-                "Fadi Khoury",
-                "Majed Abu Salah",
-                "Hassan Al-Zein",
-                "Rami Suleiman",
-                "Ibrahim Al-Atrash",
-                "Adnan Marwan",
-                "Wael Khalifa",
-                "Amjad Al-Rawi",
-                "Ziad Abu Hatem",
-                "Salim Mansour",
-                "Jamal Al-Tayeb"
-            };
+           
 
            
             for (int i = 0; i < 20; i++)
@@ -66,6 +69,23 @@ namespace IDF_Operation
             }
 
             return terorists;
+        }
+
+        public static List<Aman> generateRandomMessage()
+        {
+            List<Aman> messages = new List<Aman>();
+            string[] locations = { "Building", "Streat", "Open erea", "Vehicle" };
+            for (int i = 0; i < 20; i++)
+            {
+                string name = names[rnd.Next(names.Count)];
+                string location = locations[rnd.Next(locations.Length)];
+                DateTime time = DateTime.Now;
+
+                Aman message = new Aman(name, location, time);
+                messages.Add(message);
+            }
+           
+            return messages;
         }
     }
 }
