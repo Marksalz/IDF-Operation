@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IDF_Operation.Hamas;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,11 @@ namespace IDF_Operation.IDF
             this._timestamp = timestamp;
         }
 
+        public Terrorist? GetTerrorist()
+        {
+            return this._terrorist;
+        }
+
         public string getTerroristName()
         {
             return this._terrorist?.getName() ?? string.Empty;
@@ -29,10 +35,15 @@ namespace IDF_Operation.IDF
             return this._location ?? string.Empty;
         }
 
+        public DateTime GetTimestamp()
+        {
+            return this._timestamp ?? DateTime.MinValue;
+        }
+
         public override string ToString()
         {
-            return $"Report from {_timestamp?.ToString() ?? "unknown time"} on the terrorist: {_terrorist?.ToString() ?? "unknown terrorist"}." +
-                $"Last known location is: {_location ?? "unknown location"}";
+            return $"Report from {_timestamp?.ToString() ?? "unknown time"} on the terrorist:\n{_terrorist?.ToString() ?? "unknown terrorist"} \n" +
+                $"Last known location is: {_location ?? "unknown location"}\n";
         }
     }
 }

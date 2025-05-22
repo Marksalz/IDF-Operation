@@ -22,16 +22,17 @@ namespace IDF_Operation.IDF
             this._strikeOptions.Add(option);
         }
 
-        public void printAvalibleOptions()
+        public string printAvalibleOptions()
         {
             foreach (var option in this._strikeOptions)
             {
                 if (option.isAvailable())
                 {
-                    Console.WriteLine($"Attack unit name: {option.getName()}, " +
-                        $"remaining capacity: {option.getCapacity()}");
+                    return $"Attack unit name: {option.getName()}, " +
+                        $"remaining capacity: {option.getCapacity()}";
                 }
             }
+            return "No available options";
         }
     }
 }

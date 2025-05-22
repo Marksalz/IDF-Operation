@@ -9,47 +9,47 @@ namespace IDF_Operation.Hamas
 {
     internal class Terrorist
     {
-        private string name;
-        private int rank;
-        private bool aleve;
-        private List<string> weapons;
+        private string _name;
+        private int _rank;
+        private bool _alive;
+        private List<string> _weapons;
 
-        public Terrorist(string name, int rank, bool aleve, List<string> weapons)
+        public Terrorist(string name, int rank, bool alive, List<string> weapons)
         {
-            this.name = name;
-            this.rank = rank;
-            this.aleve = aleve;
-            this.weapons = weapons;
+            this._name = name;
+            this._rank = rank;
+            this._alive = alive;
+            this._weapons = weapons;
         }
 
         public string getName()
         { 
-            return this.name; 
+            return this._name; 
         }    
         public int getRank()
         {
-            return this.rank;
+            return this._rank;
         }
 
-        public bool getAleve()
+        public bool getAlive()
         {
-            return this.aleve;
+            return this._alive;
         }
 
-        public void setAleveToDeath()
+        public void setAliveToDeath()
         {
-            this.aleve = false;
+            this._alive = false;
         }
 
         public List<string> getWeapons()
         {
-            return this.weapons;
+            return this._weapons;
         }
 
         public int getScore()
         {
             int weaponsScore = 0;
-            foreach (var weapon in this.weapons)
+            foreach (var weapon in this._weapons)
             {
                 switch (weapon) {
                     case "Knife":
@@ -63,13 +63,13 @@ namespace IDF_Operation.Hamas
                         break;
                 }
             }
-            return this.rank * weaponsScore;
+            return this._rank * weaponsScore;
         }
 
 
         public override string ToString()
         {
-            return $"Name: {this.name}, Rank: {this.rank}, Is aleve: {this.aleve}, Weapons: {string.Join(",", this.weapons)}";
+            return $"Name: {this._name}\nRank: {this._rank}\nIs alive: {this._alive}\nWeapons: {string.Join(",", this._weapons)}";
         }
 
 
