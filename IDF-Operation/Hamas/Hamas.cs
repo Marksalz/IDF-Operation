@@ -12,13 +12,12 @@ namespace IDF_Operation.Hamas
         private Terrorist commander;
         private List<Terrorist> terrorists = new List<Terrorist>();
 
-
         public Hamas(Terrorist commander)
         {
             this.commander = commander;
         }
 
-        public void addTeroristList(List<Terrorist> terrorists)
+        public void AddTerroristListAsync(List<Terrorist> terrorists)
         {
             foreach (Terrorist terrorist in terrorists)
                 this.terrorists.Add(terrorist);
@@ -28,6 +27,5 @@ namespace IDF_Operation.Hamas
         {
             return terrorists;
         }
-
     }
 }

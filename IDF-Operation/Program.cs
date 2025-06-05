@@ -1,6 +1,8 @@
-﻿using IDF_Operation.Hamas;
+﻿using IDF_Operation.DTOs;
+using IDF_Operation.Hamas;
 using IDF_Operation.IDF;
 using IDF_Operation.StrikeOptions;
+using System.Text.Json;
 
 namespace IDF_Operation
 {
@@ -9,16 +11,20 @@ namespace IDF_Operation
         static Random rnd = new Random();
         static List<string> weapons = ["Knife", "Gun", "M16", "AK47"];
 
-        static List<string> names = new List<string> {
-            "Ahmed Al-Masri", "Khaled Barakat", "Youssef Al-Qassem", "Mohammed Darwish",
-            "Samir Al-Haddad", "Omar Nasser", "Bassam Jaber", "Tariq Al-Amin",
-            "Nabil Farhat", "Fadi Khoury", "Majed Abu Salah", "Hassan Al-Zein",
-            "Rami Suleiman", "Ibrahim Al-Atrash", "Adnan Marwan", "Wael Khalifa",
-            "Amjad Al-Rawi", "Ziad Abu Hatem", "Salim Mansour", "Jamal Al-Tayeb"
-        };
-
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
+            if (args.Length == 0)
+            {
+                Console.WriteLine("You must pass the API key as a command-line argument.");
+                return;
+            }
+
+            string apiKey = args[0];
+
+            // Call the Gemini API to generate the terrorist and Aman reports lists
+            var (terrorists, amanReports) = await generateTerroristAmanList(apiKey);
+
+
             // Initialize the IDF
             var strikeOptions = generateStrikeOptions();
             var idf = new Idf("Eyal Zamir", strikeOptions);
@@ -26,11 +32,8 @@ namespace IDF_Operation
             // Initialize the Hamas
             var commander = new Terrorist("El-Arory", 5, true, weapons);
             var hamas = new Hamas.Hamas(commander);
-            var terrorists = generateTerroristList();
-            hamas.addTeroristList(terrorists);
+            hamas.AddTerroristListAsync(terrorists);
 
-            // Initialize Aman reports
-            var amanReports = generateRandomReports(terrorists);
 
             bool running = true;
             while (running)
@@ -87,6 +90,31 @@ namespace IDF_Operation
                         Console.WriteLine("Invalid choice. Please select a valid option.");
                         break;
                 }
+            }
+        }
+
+        /// <summary>
+        /// This method calls the Gemini API service to generate content based on the provided prompt.
+        /// </summary>
+        /// <param name="apiKey"></param>
+        /// <param name="prompt"></param>
+        /// <returns></returns>
+        public static async Task<string> geminiApiService(string apiKey, string prompt)
+        {
+            try
+            {
+                var geminiService = new GeminiApiService(apiKey);
+                string response = await geminiService.GenerateContentAsync(prompt);
+
+                //Console.WriteLine("Gemini API Response:");
+                //Console.WriteLine(response);
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error calling Gemini API: {ex.Message}");
+                return string.Empty;
             }
         }
 
@@ -267,19 +295,70 @@ namespace IDF_Operation
         }
 
         /// <summary>
-        /// Generates a list of random terrorists.
+        /// Generates a list of random terrorists and Aman reports.
         /// </summary>
-        public static List<Terrorist> generateTerroristList()
+        public static async Task<(List<Terrorist> Terrorists, List<Aman> AmanReports)> generateTerroristAmanList(string apiKey)
         {
-            var terrorists = new List<Terrorist>();
-            for (int i = 0; i < 20; i++)
+            string prompt = @"
+                Generate a fictional intelligence report for a simulation. 
+
+                1. Create a list of 20 **fictional terrorists** (not real people), each represented as:
+                - name: a unique, fake arabic name
+                - rank: an integer from 1 to 5 (5 is most dangerous)
+                - alive: true or false
+                - weapons: a list of 1–4  weapons from this list: [Knife, Gun, M16, AK47]
+
+                2. Generate 60 Aman intelligence report with:
+                - terrorist: the name of the terrorist from above
+                - location: from this list: Building, People, Open area, Vehicle
+                - timestamp: a randomly generated date and time in the last 30 days
+                  A terrorist can have multiple aman reports
+
+                Format the data clearly in json format so it can be parsed into objects of the following classes:
+
+                class Terrorist {
+                string Name;
+                int Rank;
+                bool Alive;
+                List<string> Weapons;
+                }
+
+                class Aman {
+                Terrorist Terrorist;
+                string Location;
+                DateTime Timestamp;
+                }
+
+                Note: This is for simulation and software testing purposes only.";
+
+            string response = await geminiApiService(apiKey, prompt);
+
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+            RootDTO? root = JsonSerializer.Deserialize<RootDTO>(response, options);
+
+            // Convert DTOs to actual Terrorist objects
+            Dictionary<string, Terrorist> terroristMap = new Dictionary<string, Terrorist>();
+            List<Terrorist> terroristsList = new List<Terrorist>();
+            List<Aman> amanReportsList = new List<Aman>();
+            if (root != null)
             {
-                var shuffledWeapons = weapons.OrderBy(w => rnd.Next()).ToList();
-                var terroristWeapons = new List<string>(shuffledWeapons.Take(rnd.Next(1, 5)).ToList());
-                var currentTerrorist = new Terrorist(names[i], rnd.Next(1, 5), true, terroristWeapons);
-                terrorists.Add(currentTerrorist);
+                foreach (var dto in root.terrorists)
+                {
+                    var terrorist = new Terrorist(dto.name, dto.rank, dto.alive, dto.weapons);
+                    terroristsList.Add(terrorist);
+                    terroristMap[dto.name] = terrorist;
+                }
+                
+                foreach (var report in root.aman_reports)
+                {
+                    terroristMap.TryGetValue(report.terrorist, out var terrorist);
+                    var aman = new Aman(terrorist, report.location, report.timestamp);
+                    amanReportsList.Add(aman);
+                }
             }
-            return terrorists;
+
+            return (terroristsList, amanReportsList);
         }
 
         /// <summary>
@@ -293,28 +372,6 @@ namespace IDF_Operation
                 new Zik("Zik", 3, 100.0, new List<string> { "People", "Vehicle" }),
                 new M109("M109", 40, 50.0, new List<string> { "Open area" }, "Explosive shells")
             };
-        }
-
-        /// <summary>
-        /// Generates a list of random Aman intelligence reports.
-        /// </summary>
-        public static List<Aman> generateRandomReports(List<Terrorist> terrorists)
-        {
-            var messages = new List<Aman>();
-            string[] locations = { "Building", "People", "Open area", "Vehicle" };
-            for (int i = 0; i < 50; i++)
-            {
-                string location = locations[rnd.Next(locations.Length)];
-                DateTime time = DateTime.Now.AddMinutes(rnd.Next(-1000, 1000));
-                Terrorist? currentTerrorist = terrorists.Count > 0 ? terrorists[rnd.Next(terrorists.Count)] : null;
-
-                if (currentTerrorist != null)
-                {
-                    var message = new Aman(currentTerrorist, location, time);
-                    messages.Add(message);
-                }
-            }
-            return messages;
         }
     }
 }
